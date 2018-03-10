@@ -16,7 +16,6 @@
         <TextBox x:Name="KeyLabelEncrypt" HorizontalAlignment="Left" Height="23" Margin="25,120,0,0" TextWrapping="Wrap" Text="Key is displayed here." VerticalAlignment="Top" Width="166"/>
         <Label Content="ENCRYPT" HorizontalAlignment="Left" Margin="25,10,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Semilight" FontSize="18"/>
         <Label Content="DECRYPT" HorizontalAlignment="Left" Margin="328,10,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Semilight" FontSize="18"/>
-        <TextBox x:Name="Ciphertextbox" HorizontalAlignment="Left" Height="63" Margin="328,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288"/>
         <TextBox x:Name="KeyLabelDecrypt" HorizontalAlignment="Left" Height="23" Margin="328,120,0,0" TextWrapping="Wrap" Text="Input key here" VerticalAlignment="Top" Width="166"/>
         <Button x:Name="DecryptBtn" Content="Decrypt" HorizontalAlignment="Left" Margin="514,111,0,0" VerticalAlignment="Top" Width="102" Click="EncryptBtn_Click" Height="36"/>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="25" Margin="328,161,0,0" Stroke="Black" VerticalAlignment="Top" Width="288" RenderTransformOrigin="-0.4,0.09"/>
@@ -24,6 +23,7 @@
         <TextBlock x:Name="PlaintextLabel" HorizontalAlignment="Left" Margin="338,198,0,0" TextWrapping="Wrap" Text="Decrypted text is displayed here" VerticalAlignment="Top" Height="70" Width="267"/>
         <TextBlock x:Name="SHA1LabelDecrypt" HorizontalAlignment="Right" Margin="0,166,41,145" TextWrapping="Wrap" Text="SHA-1 Hash Code is displayed here." Width="267" FontSize="11"/>
         <TextBlock x:Name="Notification" HorizontalAlignment="Left" Margin="25,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591" FontSize="16" TextAlignment="Center"/>
+        <Button x:Name="openFileBtn" Content="Open File" HorizontalAlignment="Left" Margin="514,60,0,0" VerticalAlignment="Top" Width="102" Height="36"/>
 
     </Grid>
 </Window>

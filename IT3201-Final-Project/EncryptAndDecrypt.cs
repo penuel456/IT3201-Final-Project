@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,6 +27,22 @@ namespace IT3201_Final_Project
                 }
 
                 return sb.ToString();
+            }
+        }
+
+        public void storeInFile(String ciphertext, String hash)
+        {
+            String path = Path.Combine(Environment.CurrentDirectory, "IT3201-text.txt");
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            using (StreamWriter writetext = File.CreateText(path))
+            {
+                writetext.WriteLine(ciphertext);
+                writetext.WriteLine(hash);
             }
         }
 

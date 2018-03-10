@@ -29,12 +29,21 @@ namespace IT3201_Final_Project
 
         private void EncryptBtn_Click(object sender, RoutedEventArgs e)
         {
-            SHA1LabelEncrypt.Text = ead.Hash(PlaintextLabel.Text);
-            KeyLabelEncrypt.Text = ead.generateRandomKey((PlaintextLabel.Text.Length / 2));
+            if(Plaintextbox.Text.Length >= 3)
+            {
+                SHA1LabelEncrypt.Text = ead.Hash(Plaintextbox.Text);
+                KeyLabelEncrypt.Text = ead.generateRandomKey(Plaintextbox.Text.Length);
 
-            CiphertextLabel.Text = ead.Encrypt(PlaintextLabel.Text, KeyLabelEncrypt.Text.Length, KeyLabelEncrypt.Text);
+                CiphertextLabel.Text = ead.Encrypt(Plaintextbox.Text, KeyLabelEncrypt.Text.Length, KeyLabelEncrypt.Text);
 
-            Notification.Text = "Text Successfully encrypted.";
+                Notification.Text = "Text Successfully encrypted.";
+            }
+            else
+            {
+                Notification.Text = "Plain text minimum of 3 characters only.";
+            }
+
+            
         }
     }
 }

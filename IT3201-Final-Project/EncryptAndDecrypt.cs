@@ -9,6 +9,9 @@ namespace IT3201_Final_Project
 {
     class EncryptAndDecrypt
     {
+        UnicodeEncoding ByteConverter = new UnicodeEncoding();
+        RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+
         public String Hash(string input)
         {
             using (SHA1Managed sha1 = new SHA1Managed())
@@ -40,30 +43,19 @@ namespace IT3201_Final_Project
         }
 
         // The main Encryption. Put all the encryption steps here, in a correct order.
-        // Caesar -> Transposition -> RSA
         public String Encrypt(String input, int inputLen, String key)
         {
             String output;
 
-            output = CaesarCipherEncrypt(input, inputLen);
-            output = TranspositionCipherEncrypt(input, key, '-');
+            output = CaesarCipher(input, inputLen);
+            output = TranspositionCipher(input, key, '-');
+            output = RSAEncrypt(ByteConverter.GetBytes(input), RSA.ExportParameters(false), false);
 
             return output;
         }
-
-        // The main Decryption. Put all the encryption steps here, in a correct order.
-        // RSA -> Transposition -> Caesar
-        /*
-        public String Decrypt(String input, int inputLen, String key)
-        {
-            String output;
-
-            return output;
-        }
-        */
         
 
-        public String CaesarCipherEncrypt(String input, int shiftLength)
+        public String CaesarCipher(String input, int shiftLength)
         {
             StringBuilder output = new StringBuilder();
             char[] buffer = input.ToCharArray();
@@ -97,14 +89,14 @@ namespace IT3201_Final_Project
             return output.ToString();
         }
 
-        private static int[] GetShiftIndexes(string key)
+        private int[] GetShiftIndexes(string key)
         {
-            int keyLen = key.Length;
-            int[] indexes = new int[keyLen];
+            int keyLength = key.Length;
+            int[] indexes = new int[keyLength];
             List<KeyValuePair<int, char>> sortedKey = new List<KeyValuePair<int, char>>();
             int i;
 
-            for (i = 0; i < keyLen; ++i)
+            for (i = 0; i < keyLength; ++i)
                 sortedKey.Add(new KeyValuePair<int, char>(i, key[i]));
 
             sortedKey.Sort(
@@ -113,50 +105,39 @@ namespace IT3201_Final_Project
                 }
             );
 
-            for (i = 0; i < keyLen; ++i)
-            {
+            for (i = 0; i < keyLength; ++i)
                 indexes[sortedKey[i].Key] = i;
-            }
 
             return indexes;
         }
 
-        public String TranspositionCipherEncrypt(string input, string key, char padChar)
+        public String TranspositionCipher(string input, string key, char padChar)
         {
             input = (input.Length % key.Length == 0) ? input : input.PadRight(input.Length - (input.Length % key.Length) + key.Length, padChar);
             StringBuilder output = new StringBuilder();
             int totalChars = input.Length;
-            int totalCols = key.Length;
-            int totalRows = (int)Math.Ceiling((double)totalChars / totalCols);
-            char[,] rowCharacters = new char[totalRows, totalCols];
-            char[,] colCharacters = new char[totalCols, totalRows];
-            char[,] sortedColChars = new char[totalCols, totalRows];
+            int totalColumns = key.Length;
+            int totalRows = (int)Math.Ceiling((double)totalChars / totalColumns);
+            char[,] rowChars = new char[totalRows, totalColumns];
+            char[,] colChars = new char[totalColumns, totalRows];
+            char[,] sortedColChars = new char[totalColumns, totalRows];
             int currentRow, currentColumn, i, j;
             int[] shiftIndexes = GetShiftIndexes(key);
 
             for (i = 0; i < totalChars; ++i)
             {
-                currentRow = i / totalCols;
-                currentColumn = i % totalCols;
-                rowCharacters[currentRow, currentColumn] = input[i];
+                currentRow = i / totalColumns;
+                currentColumn = i % totalColumns;
+                rowChars[currentRow, currentColumn] = input[i];
             }
 
             for (i = 0; i < totalRows; ++i)
-            {
-                for (j = 0; j < totalCols; ++j)
-                {
-                    colCharacters[j, i] = rowCharacters[i, j];
-                }  
-            }
-                
+                for (j = 0; j < totalColumns; ++j)
+                    colChars[j, i] = rowChars[i, j];
 
-            for (i = 0; i < totalCols; ++i)
-            {
+            for (i = 0; i < totalColumns; ++i)
                 for (j = 0; j < totalRows; ++j)
-                {
-                    sortedColChars[shiftIndexes[i], j] = colCharacters[i, j];
-                } 
-            }
+                    sortedColChars[shiftIndexes[i], j] = colChars[i, j];
 
             for (i = 0; i < totalChars; ++i)
             {
@@ -166,6 +147,25 @@ namespace IT3201_Final_Project
             }
 
             return output.ToString();
+        }
+
+        public String RSAEncrypt(byte[] Data, RSAParameters RSAKey, bool DoOAEPPadding)
+        {
+            try
+            {
+                byte[] encryptedData;
+                using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                {
+                    RSA.ImportParameters(RSAKey);
+                    encryptedData = RSA.Encrypt(Data, DoOAEPPadding);
+                }
+                return Convert.ToBase64String(encryptedData);
+            }
+            catch (CryptographicException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
     }
 }

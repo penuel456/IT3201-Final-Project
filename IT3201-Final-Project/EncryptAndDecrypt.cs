@@ -32,6 +32,7 @@ namespace IT3201_Final_Project
 
         public void storeInFile(String ciphertext, String hash)
         {
+            // Storing ciphertext and SHA-1 hash
             String path = Path.Combine(Environment.CurrentDirectory, "IT3201-text.txt");
 
             if (File.Exists(path))
@@ -44,22 +45,48 @@ namespace IT3201_Final_Project
                 writetext.WriteLine(ciphertext);
                 writetext.WriteLine(hash);
             }
+
+            // Storing public key
+            path = Path.Combine(Environment.CurrentDirectory, "IT3201-pubKey.pem");
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            using (StreamWriter writetext = File.CreateText(path))
+            {
+                writetext.WriteLine(RSA.ToXmlString(false));
+            }
+
+            // Storing private key
+            path = Path.Combine(Environment.CurrentDirectory, "IT3201-privKey.pem");
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            using (StreamWriter writetext = File.CreateText(path))
+            {
+                writetext.WriteLine(RSA.ToXmlString(true));
+            }
         }
 
         public String generateRandomKey(int inputLen)
         {
-            const int MAX = 15;
-            const string valid = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const int MAX = 10;
+            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             StringBuilder res = new StringBuilder();
             Random rnd = new Random();
             for(int i = 0; i < inputLen && i < MAX; i++)
             {
-                res.Append(valid[rnd.Next(valid.Length)]);
+                res.Append(alphabet[rnd.Next(alphabet.Length)]);
             }
             return res.ToString();
         }
 
-        // The main Encryption. Put all the encryption steps here, in a correct order.
+        // The main Encryption method. Put all the encryption steps here, in a correct order.
         public String Encrypt(String input, int inputLen, String key)
         {
             String output;
@@ -166,6 +193,7 @@ namespace IT3201_Final_Project
             return output.ToString();
         }
 
+        // REFERENCE: RSA ciphertext length is 172
         public String RSAEncrypt(byte[] Data, RSAParameters RSAKey, bool DoOAEPPadding)
         {
             try

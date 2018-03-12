@@ -23,7 +23,7 @@
         <TextBlock x:Name="PlaintextLabel" HorizontalAlignment="Left" Margin="338,198,0,0" TextWrapping="Wrap" Text="Decrypted text is displayed here" VerticalAlignment="Top" Height="70" Width="267"/>
         <TextBlock x:Name="SHA1LabelDecrypt" HorizontalAlignment="Right" Margin="0,166,41,145" TextWrapping="Wrap" Text="SHA-1 Hash Code is displayed here." Width="267" FontSize="11"/>
         <TextBlock x:Name="Notification" HorizontalAlignment="Left" Margin="25,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591" FontSize="16" TextAlignment="Center"/>
-        <Button x:Name="openFileBtn" Content="Open File" HorizontalAlignment="Left" Margin="514,60,0,0" VerticalAlignment="Top" Width="102" Height="36"/>
+        <Button x:Name="openFileBtn" Content="Open File" HorizontalAlignment="Left" Margin="514,60,0,0" VerticalAlignment="Top" Width="102" Height="36" Click="openFileBtn_Click"/>
 
     </Grid>
 </Window>

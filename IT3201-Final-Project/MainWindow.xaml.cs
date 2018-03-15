@@ -27,6 +27,9 @@ namespace IT3201_Final_Project
         }
 
         EncryptAndDecrypt ead = new EncryptAndDecrypt();
+        byte[] decryptionbytes;
+        String ciphertodecrypt;
+        String oldhash;
 
         private void EncryptBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -50,6 +53,7 @@ namespace IT3201_Final_Project
         {
             Stream stream = null;
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            String[] ciphandhash = { };
 
             dlg.DefaultExt = ".txt";
             dlg.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -62,10 +66,49 @@ namespace IT3201_Final_Project
                 {
                     using (stream)
                     {
-                        stream.ToString();
+
+                        ciphandhash = ead.readCiphandHash();
+                        ciphertodecrypt = ciphandhash[0];
+                        //SHA1LabelDecrypt.Text = ciphandhash[1];
+                        oldhash = ciphandhash[1];
                     }
                 } 
             }
+        }
+
+        private void DecryptBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //PlaintextLabel.Text = ciphertodecrypt;
+            String result;
+            if(KeyLabelDecrypt.Text.Length >= 0)
+            {
+                if(ciphertodecrypt.Length != 172 || ciphertodecrypt == null)
+                {
+                    Notification.Text = "Message is unverified";
+                }
+                else
+                {
+                    result = ead.Decrypt(ciphertodecrypt, KeyLabelDecrypt.Text.Length, KeyLabelDecrypt.Text);
+                    PlaintextLabel.Text = result;
+                    SHA1LabelDecrypt.Text = ead.Hash(PlaintextLabel.Text);
+                }
+               
+                if(String.Equals(oldhash, SHA1LabelDecrypt.Text))
+                {
+                    Notification.Text = "MESSAGE VERIFIED!!";
+                }
+                else
+                {
+                    Notification.Text = "Message is unverified";
+                }
+            }
+            else
+            {
+                Notification.Text = "Please input the key before decrypting.";
+            }
+            
+            
+            
         }
     }
 }

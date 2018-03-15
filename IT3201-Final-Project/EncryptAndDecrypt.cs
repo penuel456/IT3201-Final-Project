@@ -12,7 +12,7 @@ namespace IT3201_Final_Project
     {
         UnicodeEncoding ByteConverter = new UnicodeEncoding();
         RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
-
+        String oldhash;
         public String Hash(string input)
         {
             using (SHA1Managed sha1 = new SHA1Managed())
@@ -92,12 +92,11 @@ namespace IT3201_Final_Project
             String output;
 
             output = CaesarCipher(input, inputLen);
-            output = TranspositionCipher(input, key, '-');
-            output = RSAEncrypt(ByteConverter.GetBytes(input), RSA.ExportParameters(false), false);
+            output = TranspositionCipher(output, key, '-');
+            output = RSAEncrypt(ByteConverter.GetBytes(output), RSA.ExportParameters(false), false);
 
             return output;
         }
-        
 
         public String CaesarCipher(String input, int shiftLength)
         {
@@ -211,6 +210,157 @@ namespace IT3201_Final_Project
                 Console.WriteLine(e.Message);
                 return null;
             }
+        }
+        //Decryption Area from this point downwards
+
+
+        public String[] readCiphandHash()
+        {
+            String path = Path.Combine(Environment.CurrentDirectory, "IT3201-text.txt");
+            String[] enctext = new String[2];
+            using (StreamReader readtext = new StreamReader(path))
+            {
+                enctext[0] = readtext.ReadLine();   // Ciphertext
+                enctext[1] = readtext.ReadLine();  // OLD HASH
+                oldhash = enctext[1];
+                //writetext.WriteLine(ciphertext);
+                //writetext.WriteLine(hash);
+                return enctext;
+            }
+        }
+
+        public byte[] bytesToDecrypt(String ciph)
+        {
+            var btd = Convert.FromBase64String(ciph);
+
+            return btd;
+        }
+
+        public void getPrivKey()
+        {
+            String path = Path.Combine(Environment.CurrentDirectory, "IT3201-privKey.pem");
+            var pem = File.ReadAllText(path);
+            RSA.FromXmlString(pem);
+        }
+
+        public String Decrypt(String input, int inputLen, String key)
+        {
+            String output;
+            byte[] bytestoDec = bytesToDecrypt(input);
+            getPrivKey();
+             output = RSADecrypt(bytestoDec, RSA.ExportParameters(true), false);
+            if (output != null)
+            {
+                output = DecryptTranspo(output, key);
+                output = DecryptCaesar(output, inputLen);
+            }
+            else
+            {
+                MainWindow mw = new MainWindow();
+                mw.Notification.Text = "Message is unverified.";
+            }
+             
+            return output;
+        }
+
+         public String RSADecrypt(byte[] DataToDecrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding)
+        {
+            try
+            {
+                byte[] decryptedData;
+                using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                {
+                    RSA.ImportParameters(RSAKeyInfo);
+                    decryptedData = RSA.Decrypt(DataToDecrypt, DoOAEPPadding);
+                }
+
+                return ByteConverter.GetString(decryptedData);
+            }
+            //Catch and display a CryptographicException  
+            //to the console.
+            catch (CryptographicException e)
+            {
+                Console.WriteLine(e.ToString());
+
+                return null;
+            }
+
+        }
+
+        public String DecryptTranspo(string input, string key)
+        {
+            StringBuilder output = new StringBuilder();
+            int totalChars = input.Length;
+            int totalColumns = (int)Math.Ceiling((double)totalChars / key.Length);
+            int totalRows = key.Length;
+            char[,] rowChars = new char[totalRows, totalColumns];
+            char[,] colChars = new char[totalColumns, totalRows];
+            char[,] unsortedColChars = new char[totalColumns, totalRows];
+            int currentRow, currentColumn, i, j;
+            int[] shiftIndexes = GetShiftIndexes(key);
+
+            for (i = 0; i < totalChars; ++i)
+            {
+                currentRow = i / totalColumns;
+                currentColumn = i % totalColumns;
+                rowChars[currentRow, currentColumn] = input[i];
+            }
+
+            for (i = 0; i < totalRows; ++i)
+                for (j = 0; j < totalColumns; ++j)
+                    colChars[j, i] = rowChars[i, j];
+
+            for (i = 0; i < totalColumns; ++i)
+                for (j = 0; j < totalRows; ++j)
+                    unsortedColChars[i, j] = colChars[i, shiftIndexes[j]];
+
+            for (i = 0; i < totalChars; ++i)
+            {
+                currentRow = i / totalRows;
+                currentColumn = i % totalRows;
+                output.Append(unsortedColChars[currentRow, currentColumn]);
+                if (output.ToString().Contains("-"))
+                {
+                    output.Replace("-", null);
+                }
+            }
+
+            
+            return output.ToString();
+        }
+
+        public String DecryptCaesar(String input, int shiftLength)
+        {
+            StringBuilder output = new StringBuilder();
+            char[] buffer = input.ToCharArray();
+
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                char letter = buffer[i];
+
+                // Checks for spaces.
+                if (!char.IsWhiteSpace(letter))
+                {
+                    letter = (char)(letter - shiftLength);
+
+                    if (letter > 'z')
+                    {
+                        letter = (char)(letter - 26);
+                    }
+                    else if (letter < 'a')
+                    {
+                        letter = (char)(letter + 26);
+                    }
+
+                    output.Append(letter);
+                }
+                else
+                {
+                    output.Append(" ");
+                }
+
+            }
+            return output.ToString();
         }
     }
 }

@@ -71,6 +71,7 @@ namespace IT3201_Final_Project
                         ciphertodecrypt = ciphandhash[0];
                         //SHA1LabelDecrypt.Text = ciphandhash[1];
                         oldhash = ciphandhash[1];
+                        fileLoadNotif.Text = "File successfully loaded.";
                     }
                 } 
             }
@@ -80,11 +81,11 @@ namespace IT3201_Final_Project
         {
             //PlaintextLabel.Text = ciphertodecrypt;
             String result;
-            if(KeyLabelDecrypt.Text.Length >= 0)
+            if(KeyLabelDecrypt.Text.Length > 0)
             {
                 if(ciphertodecrypt.Length != 172 || ciphertodecrypt == null)
                 {
-                    Notification.Text = "Message is unverified";
+                    Notification.Text = "Message is unverified.";
                 }
                 else
                 {
@@ -95,11 +96,11 @@ namespace IT3201_Final_Project
                
                 if(String.Equals(oldhash, SHA1LabelDecrypt.Text))
                 {
-                    Notification.Text = "MESSAGE VERIFIED!!";
+                    Notification.Text = "MESSAGE VERIFIED!";
                 }
                 else
                 {
-                    Notification.Text = "Message is unverified";
+                    Notification.Text = "Message is unverified.";
                 }
             }
             else

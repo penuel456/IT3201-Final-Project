@@ -76,7 +76,7 @@ namespace IT3201_Final_Project
         public String generateRandomKey(int inputLen)
         {
             const int MAX = 10;
-            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             StringBuilder res = new StringBuilder();
             Random rnd = new Random();
             for(int i = 0; i < inputLen && i < MAX; i++)
@@ -257,7 +257,7 @@ namespace IT3201_Final_Project
             else
             {
                 MainWindow mw = new MainWindow();
-                mw.Notification.Text = "Message is unverified.";
+                mw.Notification.Text = "Message is unverified. File may be corrupted or tampered.";
             }
              
             return output;

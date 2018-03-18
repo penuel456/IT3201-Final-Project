@@ -28,7 +28,7 @@ namespace IT3201_Final_Project
 
         EncryptAndDecrypt ead = new EncryptAndDecrypt();
         byte[] decryptionbytes;
-        String ciphertodecrypt;
+        String ciphertodecrypt = null;
         String oldhash;
 
         private void EncryptBtn_Click(object sender, RoutedEventArgs e)
@@ -81,7 +81,7 @@ namespace IT3201_Final_Project
         {
             //PlaintextLabel.Text = ciphertodecrypt;
             String result;
-            if(KeyLabelDecrypt.Text.Length > 0)
+            if(KeyLabelDecrypt.Text.Length > 0 && ciphertodecrypt != null)
             {
                 if(ciphertodecrypt.Length != 172 || ciphertodecrypt == null)
                 {
@@ -105,7 +105,7 @@ namespace IT3201_Final_Project
             }
             else
             {
-                Notification.Text = "Please input the key before decrypting.";
+                Notification.Text = "Please input the key or open the text file before decrypting.";
             }
             
             

@@ -85,7 +85,7 @@ namespace IT3201_Final_Project
             {
                 if(ciphertodecrypt.Length != 172 || ciphertodecrypt == null)
                 {
-                    Notification.Text = "Message is unverified.";
+                    Notification.Text = "Message is unverified..";
                 }
                 else
                 {

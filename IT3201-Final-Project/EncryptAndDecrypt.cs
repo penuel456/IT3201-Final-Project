@@ -223,8 +223,7 @@ namespace IT3201_Final_Project
                 enctext[0] = readtext.ReadLine();   // Ciphertext
                 enctext[1] = readtext.ReadLine();  // OLD HASH
                 oldhash = enctext[1];
-                //writetext.WriteLine(ciphertext);
-                //writetext.WriteLine(hash);
+                
                 return enctext;
             }
         }
@@ -243,6 +242,7 @@ namespace IT3201_Final_Project
             RSA.FromXmlString(pem);
         }
 
+        // The main decryption method.
         public String Decrypt(String input, int inputLen, String key)
         {
             String output;

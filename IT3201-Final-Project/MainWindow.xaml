@@ -20,7 +20,7 @@
         <Button x:Name="DecryptBtn" Content="Decrypt" HorizontalAlignment="Left" Margin="514,111,0,0" VerticalAlignment="Top" Width="102" Click="DecryptBtn_Click" Height="36"/>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="25" Margin="328,161,0,0" Stroke="Black" VerticalAlignment="Top" Width="288" RenderTransformOrigin="-0.4,0.09"/>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="119" Margin="328,198,0,0" Stroke="Black" VerticalAlignment="Top" Width="288" RenderTransformOrigin="-0.4,0.09"/>
-        <TextBlock x:Name="PlaintextLabel" HorizontalAlignment="Left" Margin="338,203,0,0" TextWrapping="Wrap" Text="Decrypted text is displayed here" VerticalAlignment="Top" Height="102" Width="267"/>
+        <TextBlock x:Name="PlaintextLabel" HorizontalAlignment="Left" Margin="338,203,0,0" TextWrapping="Wrap" Text="Decrypted text is displayed here." VerticalAlignment="Top" Height="102" Width="267"/>
         <TextBlock x:Name="SHA1LabelDecrypt" HorizontalAlignment="Right" Margin="0,166,41.2,248.6" TextWrapping="Wrap" Text="SHA-1 Hash Code is displayed here." Width="267" FontSize="11"/>
         <TextBlock x:Name="Notification" HorizontalAlignment="Left" Margin="25,322,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="591" FontSize="16" TextAlignment="Center"/>
         <Button x:Name="openFileBtn" Content="Open File" HorizontalAlignment="Left" Margin="514,60,0,0" VerticalAlignment="Top" Width="102" Height="36" Click="openFileBtn_Click"/>
